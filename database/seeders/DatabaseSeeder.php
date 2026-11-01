@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+<<<<<<< HEAD
         // ---------- Catégories (5) ----------
         $boissons = Categorie::create(['nom' => 'Boissons']);
         $consommables = Categorie::create(['nom' => 'Consommables']);
@@ -69,5 +70,11 @@ class DatabaseSeeder extends Seeder
                 'categorie_id' => $description['categorie']->id,
             ]);
         }
+=======
+        $this->call([
+            CategorieSeeder::class,
+            ProduitSeeder::class,
+        ]);
+>>>>>>> ac7d1f3d59c46b902265f652e2e5e3179a34b60d
     }
 }
