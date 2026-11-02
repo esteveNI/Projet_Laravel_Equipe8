@@ -1,0 +1,543 @@
+/*
+ * Feuille de style de l'application « Suivi de stock — Équipe 8 ».
+ * Écrite sans framework CSS : simple, légère et adaptée au téléphone.
+ * Utilisée par le gabarit commun resources/views/layout.blade.php (bloc 2 de Vital).
+ */
+
+/* ---------- Variables de couleurs et réglages globaux ---------- */
+
+:root {
+    --couleur-fond: #f4f6fb;
+    --couleur-carte: #ffffff;
+    --couleur-texte: #1f2937;
+    --couleur-texte-doux: #6b7280;
+    --couleur-bordure: #e5e7eb;
+    --couleur-accent: #2563eb;
+    --couleur-accent-fonce: #1e40af;
+    --couleur-succes: #16a34a;
+    --couleur-succes-fond: #dcfce7;
+    --couleur-erreur: #dc2626;
+    --couleur-erreur-fond: #fee2e2;
+    --couleur-alerte-fond: #fef3c7;
+    --couleur-alerte-texte: #92400e;
+    --rayon: 10px;
+    --ombre: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--couleur-fond);
+    color: var(--couleur-texte);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* ---------- En-tête et menu (qui se replie sur téléphone) ---------- */
+
+.l-en-tete {
+    background-color: var(--couleur-carte);
+    border-bottom: 1px solid var(--couleur-bordure);
+    box-shadow: var(--ombre);
+}
+
+.l-en-tete .rangee-en-tete {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.titre-du-site {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--couleur-texte);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.titre-du-site span {
+    color: var(--couleur-accent);
+}
+
+/* Le menu se replie sur les petits écrans : on l'ouvre avec le bouton .bouton-menu */
+.menu {
+    display: none;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 16px 12px;
+}
+
+.menu a {
+    padding: 10px 14px;
+    border-radius: var(--rayon);
+    color: var(--couleur-texte);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.menu a:hover {
+    background-color: var(--couleur-fond);
+}
+
+.menu a.actif {
+    background-color: var(--couleur-accent);
+    color: #ffffff;
+}
+
+/* Bouton hamburger, visible uniquement sur téléphone */
+.bouton-menu {
+    display: block;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 8px;
+    background-color: transparent;
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.bouton-menu span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    margin: 4px 0;
+    background-color: var(--couleur-texte);
+    border-radius: 2px;
+}
+
+/* À partir d'une tablette : menu toujours ouvert en ligne, hamburger masqué */
+@media (min-width: 640px) {
+    .bouton-menu {
+        display: none;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+    }
+
+    .menu a {
+        padding: 8px 14px;
+    }
+}
+
+/* ---------- Contenu principal et pied de page ---------- */
+
+.conteneur {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+    flex: 1;
+}
+
+.l-pied-de-page {
+    padding: 14px 16px;
+    border-top: 1px solid var(--couleur-bordure);
+    background-color: var(--couleur-carte);
+    color: var(--couleur-texte-doux);
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+/* ---------- En-tête de page (titre + bouton d'action) ---------- */
+
+.en-tete-page {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.en-tete-page h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.description-page {
+    margin: 4px 0 0;
+    color: var(--couleur-texte-doux);
+    font-size: 0.9rem;
+}
+
+/* ---------- Cartes et indicateurs du tableau de bord ---------- */
+
+.cartes-indicateurs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.carte {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    padding: 16px 18px;
+}
+
+.carte-label {
+    display: block;
+    color: var(--couleur-texte-doux);
+    font-size: 0.85rem;
+}
+
+.carte-valeur {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--couleur-texte);
+}
+
+.carte.alerte .carte-valeur {
+    color: var(--couleur-erreur);
+}
+
+/* ---------- Les autres cartes (sections, tableaux) ---------- */
+
+.section-carte {
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    overflow: hidden;
+}
+
+.section-carte h2 {
+    margin: 0;
+    padding: 14px 18px;
+    font-size: 1.05rem;
+    border-bottom: 1px solid var(--couleur-bordure);
+}
+
+/* ---------- Tableaux (défilent horizontalement sur téléphone) ---------- */
+
+.tableau-deroulant {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+th,
+td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--couleur-bordure);
+    white-space: nowrap;
+}
+
+th {
+    background-color: #f9fafb;
+    color: var(--couleur-texte-doux);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ---------- Boutons ---------- */
+
+.bouton {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: var(--rayon);
+    background-color: var(--couleur-accent);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.bouton:hover {
+    background-color: var(--couleur-accent-fonce);
+}
+
+.bouton-editer {
+    background-color: #ffffff;
+    border-color: var(--couleur-bordure);
+    color: var(--couleur-texte);
+}
+
+.bouton-editer:hover {
+    background-color: var(--couleur-fond);
+}
+
+.bouton-danger {
+    background-color: #ffffff;
+    border-color: var(--couleur-erreur);
+    color: var(--couleur-erreur);
+}
+
+.bouton-danger:hover {
+    background-color: var(--couleur-erreur-fond);
+}
+
+.bouton-tout-petit {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+.bouton-groupe {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Étiquettes (badges) ---------- */
+
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-alerte {
+    background-color: var(--couleur-alerte-fond);
+    color: var(--couleur-alerte-texte);
+}
+
+.badge-neutre {
+    background-color: var(--couleur-bordure);
+    color: var(--couleur-texte);
+}
+
+.texte-alerte {
+    color: var(--couleur-erreur);
+    font-weight: 600;
+}
+
+.centre {
+    text-align: center;
+}
+
+/* ---------- Filtres de la liste des produits (bloc 5 d'Esteve) ---------- */
+
+/* Barre de filtres : recherche + catégorie + stock faible, empilés sur téléphone */
+.barre-filtres {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    background-color: var(--couleur-carte);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    box-shadow: var(--ombre);
+    padding: 14px 16px;
+    margin-bottom: 18px;
+}
+
+.barre-filtres .filtre {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1 1 170px;
+}
+
+.barre-filtres .filtre label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--couleur-texte-doux);
+}
+
+.barre-filtres .filtre-case {
+    flex: 0 1 auto;
+}
+
+.barre-filtres .filtre-case label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    padding: 9px 0;
+    cursor: pointer;
+}
+
+.barre-filtres .filtre-case input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--couleur-accent);
+}
+
+.barre-filtres .filtre-boutons {
+    flex: 0 0 auto;
+    flex-direction: row;
+}
+
+/* Aide sous un champ (explication du seuil d'alerte) */
+.aide-champ {
+    margin: 2px 0 0;
+    color: var(--couleur-texte-doux);
+    font-size: 0.8rem;
+}
+
+/* ---------- Formulaires (suite) ---------- */
+
+/* Marge intérieure des blocs formulaire dans les cartes */
+.contenu-formulaire {
+    padding: 18px;
+}
+
+/* ---------- Messages de succès et d'erreur (zone du gabarit) ---------- */
+
+/* Transition utilisée par l'effacement automatique du message après 5 s */
+.alerte {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: var(--rayon);
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+}
+
+.alerte-estompe {
+    opacity: 0;
+}
+
+.bouton-fermer {
+    margin-left: auto;
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.alerte-succes {
+    background-color: var(--couleur-succes-fond);
+    color: var(--couleur-succes);
+}
+
+.alerte-erreur {
+    background-color: var(--couleur-erreur-fond);
+    color: var(--couleur-erreur);
+}
+
+/* ---------- Formulaires ---------- */
+
+.flag-nom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.champ label {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.champ label.asterisque::after {
+    content: " *";
+    color: var(--couleur-erreur);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--couleur-bordure);
+    border-radius: var(--rayon);
+    background-color: #ffffff;
+    color: var(--couleur-texte);
+    font-size: 0.95rem;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    outline: 2px solid var(--couleur-accent);
+    outline-offset: 1px;
+}
+
+/* Champ invalide : bordure rouge + message d'erreur sous le champ */
+.saisie-invalide {
+    border-color: var(--couleur-erreur) !important;
+}
+
+.erreur-champ {
+    margin: 2px 0 0;
+    color: var(--couleur-erreur);
+    font-size: 0.85rem;
+}
+
+.bande-conteneur {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Section formulaire : lien de retour pour ne pas se perdre */
+.lien-retour {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--couleur-texte-doux);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.lien-retour:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Actions de la ligne de tableau (modifier / supprimer) ---------- */
+
+.actions-ligne {
+    display: flex;
+    gap: 6px;
+}
+
+/* Supprimer une catégorie : on empile le bouton sous l'icône « modify » */
+/* ---------- Informations tactiles ---------- */
+
+/* Chemin de fer : aucune règle spéciale ici pour l'instant */
+
+/* ---------- États vides (aucune donnée à afficher) ---------- */
+
+.etat-vide {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--couleur-texte-doux);
+}
+
+.etat-vide p {
+    margin: 0 0 12px;
+}
+
+.etat-vide h3 {
+    margin: 0 0 6px;
+    color: var(--couleur-texte);
+    font-size: 1.05rem;
+}
