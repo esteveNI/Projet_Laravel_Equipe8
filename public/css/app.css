@@ -1,10 +1,4 @@
-/*
- * Feuille de style de l'application « Suivi de stock — Équipe 8 ».
- * Écrite sans framework CSS : simple, légère et adaptée au téléphone.
- * Utilisée par le gabarit commun resources/views/layout.blade.php (bloc 2 de Vital).
- */
-
-/* ---------- Variables de couleurs et réglages globaux ---------- */
+/*Variables de couleurs et réglages globaux  */
 
 :root {
     --couleur-fond: #f4f6fb;
@@ -40,7 +34,7 @@ body {
     line-height: 1.5;
 }
 
-/* ---------- En-tête et menu (qui se replie sur téléphone) ---------- */
+/* -- En-tête et menu  */
 
 .l-en-tete {
     background-color: var(--couleur-carte);
@@ -71,7 +65,7 @@ body {
     color: var(--couleur-accent);
 }
 
-/* Le menu se replie sur les petits écrans : on l'ouvre avec le bouton .bouton-menu */
+/* Le menu se replie sur petits écrans : ouvrir avec le bouton .bouton-menu */
 .menu {
     display: none;
     gap: 6px;
@@ -97,7 +91,7 @@ body {
     color: #ffffff;
 }
 
-/* Bouton hamburger, visible uniquement sur téléphone */
+/* Bouton hamburger */
 .bouton-menu {
     display: block;
     border: 1px solid var(--couleur-bordure);
@@ -116,7 +110,7 @@ body {
     border-radius: 2px;
 }
 
-/* À partir d'une tablette : menu toujours ouvert en ligne, hamburger masqué */
+/* À partir de tablette menu toujours ouvert en ligne, hamburger masqué */
 @media (min-width: 640px) {
     .bouton-menu {
         display: none;
@@ -134,7 +128,7 @@ body {
     }
 }
 
-/* ---------- Contenu principal et pied de page ---------- */
+/*- Contenu principal et pied de page  */
 
 .conteneur {
     width: 100%;
@@ -153,7 +147,7 @@ body {
     font-size: 0.85rem;
 }
 
-/* ---------- En-tête de page (titre + bouton d'action) ---------- */
+/* - En-tête de page (titre + bouton d'action) --- */
 
 .en-tete-page {
     display: flex;
@@ -175,7 +169,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* ---------- Cartes et indicateurs du tableau de bord ---------- */
+/* Cartes et indicateurs du tableau de bord */
 
 .cartes-indicateurs {
     display: grid;
@@ -196,6 +190,7 @@ body {
     display: block;
     color: var(--couleur-texte-doux);
     font-size: 0.85rem;
+
 }
 
 .carte-valeur {
@@ -210,7 +205,7 @@ body {
     color: var(--couleur-erreur);
 }
 
-/* ---------- Les autres cartes (sections, tableaux) ---------- */
+/* Les autres cartes (sections, tableaux)  */
 
 .section-carte {
     background-color: var(--couleur-carte);
@@ -227,7 +222,7 @@ body {
     border-bottom: 1px solid var(--couleur-bordure);
 }
 
-/* ---------- Tableaux (défilent horizontalement sur téléphone) ---------- */
+/* Tableaux (telephones) */
 
 .tableau-deroulant {
     overflow-x: auto;
@@ -260,7 +255,7 @@ tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* ---------- Boutons ---------- */
+/*  Boutons  */
 
 .bouton {
     display: inline-block;
@@ -309,9 +304,10 @@ tbody tr:last-child td {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
-/* ---------- Étiquettes (badges) ---------- */
+/* Étiquettes (badges) */
 
 .badge {
     display: inline-block;
@@ -340,9 +336,8 @@ tbody tr:last-child td {
     text-align: center;
 }
 
-/* ---------- Filtres de la liste des produits (bloc 5 d'Esteve) ---------- */
 
-/* Barre de filtres : recherche + catégorie + stock faible, empilés sur téléphone */
+/* Barre de filtres : recherche + catégorie + stock faible,telephones */
 .barre-filtres {
     display: flex;
     flex-wrap: wrap;
@@ -393,23 +388,23 @@ tbody tr:last-child td {
     flex-direction: row;
 }
 
-/* Aide sous un champ (explication du seuil d'alerte) */
+/* Aide sous un champ  */
 .aide-champ {
     margin: 2px 0 0;
     color: var(--couleur-texte-doux);
     font-size: 0.8rem;
 }
 
-/* ---------- Formulaires (suite) ---------- */
+/* Formulaires (suite)  */
 
-/* Marge intérieure des blocs formulaire dans les cartes */
+/* Marge intérieure  formulaire dans les cartes */
 .contenu-formulaire {
     padding: 18px;
 }
 
-/* ---------- Messages de succès et d'erreur (zone du gabarit) ---------- */
+/*Messages de succès et d'erreur*/
 
-/* Transition utilisée par l'effacement automatique du message après 5 s */
+
 .alerte {
     display: flex;
     align-items: baseline;
@@ -444,7 +439,7 @@ tbody tr:last-child td {
     color: var(--couleur-erreur);
 }
 
-/* ---------- Formulaires ---------- */
+/*  Formulaire */
 
 .flag-nom {
     display: flex;
@@ -483,7 +478,7 @@ select:focus {
     outline-offset: 1px;
 }
 
-/* Champ invalide : bordure rouge + message d'erreur sous le champ */
+/* Champ invalide */
 .saisie-invalide {
     border-color: var(--couleur-erreur) !important;
 }
@@ -499,7 +494,7 @@ select:focus {
     margin: 0 auto;
 }
 
-/* Section formulaire : lien de retour pour ne pas se perdre */
+/* Section formulaire */
 .lien-retour {
     display: inline-block;
     margin-bottom: 12px;
@@ -512,19 +507,16 @@ select:focus {
     text-decoration: underline;
 }
 
-/* ---------- Actions de la ligne de tableau (modifier / supprimer) ---------- */
+/* Actions de la ligne de tableau (modifier / supprimer)  */
 
 .actions-ligne {
     display: flex;
     gap: 6px;
 }
 
-/* Supprimer une catégorie : on empile le bouton sous l'icône « modify » */
-/* ---------- Informations tactiles ---------- */
 
-/* Chemin de fer : aucune règle spéciale ici pour l'instant */
 
-/* ---------- États vides (aucune donnée à afficher) ---------- */
+
 
 .etat-vide {
     padding: 40px 20px;
@@ -540,4 +532,141 @@ select:focus {
     margin: 0 0 6px;
     color: var(--couleur-texte);
     font-size: 1.05rem;
+}
+
+
+
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+/*  En-tête : titre à gauche, menu à droite */
+.entete {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+/* Le conteneur est celui du contenu */
+.entete .conteneur {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.entete-titre {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.entete-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.entete-menu a {
+    padding: 10px 18px;
+    border-radius: 12px;
+    color: #1f2937;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.entete-menu a:hover {
+    background: #f3f4f6;
+}
+
+.entete-menu a.actif {
+    background: #2563eb;
+    color: #fff;
+}
+
+.entete-burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    background: none;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.entete-burger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #1f2937;
+}
+
+/* Téléphone  */
+@media (max-width: 720px) {
+    .entete-burger {
+        display: flex;
+    }
+
+    .entete-menu {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+    }
+
+    .entete-menu.ouvert {
+        display: flex;
+    }
+}
+
+/*  Barre de filtres  */
+.barre-filtres {
+    align-items: flex-end;
+}
+
+.filtre-case label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 46px;
+    cursor: pointer;
+}
+
+/*  Boîte de confirmation de suppression  */
+.dialogue {
+    width: min(92vw, 440px);
+    padding: 24px;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.dialogue::backdrop {
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.dialogue h2 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+}
+
+.dialogue p {
+    margin: 0 0 20px;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.dialogue-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }

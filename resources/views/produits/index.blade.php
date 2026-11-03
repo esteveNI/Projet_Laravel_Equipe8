@@ -1,18 +1,3 @@
-{{--
-
-    Vue : liste des produits (blocs 3 et 5 d'Esteve).
-
-    - Trois filtres combinables (méthode GET) : recherche par nom,
-      filtre par catégorie et case « stock faible seulement » ;
-      les valeurs restent affichées après la recherche.
-    - Tableau avec le nom, la catégorie, la quantité, le seuil, le prix
-      et les actions modifier / supprimer.
-    - Un produit en alerte (quantité qui atteint ou passe sous le seuil)
-      porte une étiquette « Stock faible » visible.
-    - Deux états vides : « aucun produit » (liste vide) et
-      « aucun résultat » (recherche ou filtres sans correspondance).
-
---}}
 @extends('layout')
 
 @section('titre', 'Produits — Ma boutique')
@@ -30,10 +15,10 @@
     </div>
 
     {{-- Formulaire de recherche et de filtres : GET pour rester dans l'URL --}}
-    <form action="{{ route('produits.index') }}" method="GET" class="barre-filtres">
+    <form action="{{ route('produits.index') }}" method="GET" class="barre-filtres" id="formulaire-filtres">
         <div class="filtre">
             <label for="recherche">Nom du produit</label>
-            <input type="text" name="recherche" id="recherche"
+            <input type="text" name="recherche" id="recherche" autocomplete="off"
                    value="{{ e($filtres['recherche']) }}" placeholder="Rechercher par nom...">
         </div>
 
@@ -51,14 +36,16 @@
         </div>
 
         <div class="filtre filtre-case">
-            <label for="faible">Stock faible seulement</label>
-            <input type="checkbox" name="faible" id="faible" value="1"
-                @checked($filtres['faible'])>
+            <label for="faible">
+                <input type="checkbox" name="faible" id="faible" value="1" @checked($filtres['faible'])>
+                Stock faible seulement
+            </label>
         </div>
 
         <div class="filtre filtre-boutons">
-            <button type="submit" class="bouton">Rechercher</button>
-            {{-- Ne réinitialiser le formulaire que si un filtre est actif --}}
+            {{-- Sans JavaScript, le bouton reste disponible --}}
+            <noscript><button type="submit" class="bouton">Rechercher</button></noscript>
+            {{-- Ne proposer la réinitialisation que si un filtre est actif --}}
             @if ($filtreActif)
                 <a href="{{ route('produits.index') }}" class="bouton bouton-editer">Réinitialiser</a>
             @endif
@@ -119,15 +106,15 @@
                                             <a href="{{ route('produits.edit', $produit) }}"
                                                class="bouton bouton-editer bouton-tout-petit">Modifier</a>
 
-                                            {{-- Suppression avec confirmation du navigateur --}}
-                                            <form action="{{ route('produits.destroy', $produit) }}" method="POST"
-                                                  onsubmit="return confirm('Voulez-vous vraiment supprimer le produit « {{ $produit->nom }} » ?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="bouton bouton-danger bouton-tout-petit">
-                                                    Supprimer
-                                                </button>
-                                            </form>
+                                            {{-- Suppression : le bouton ouvre la boîte de confirmation du gabarit --}}
+                                            <button type="button" class="bouton bouton-danger bouton-tout-petit"
+                                                    data-suppression
+                                                    data-action="{{ route('produits.destroy', $produit) }}"
+                                                    data-titre="Supprimer ce produit ?"
+                                                    data-message="Le produit « {{ $produit->nom }} » sera définitivement supprimé. Cette action est irréversible."
+                                                    data-bloque="0">
+                                                Supprimer
+                                            </button>
                                         @endif
                                     </div>
                                 </td>
@@ -140,3 +127,35 @@
     </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    // Recherche et filtres automatiques
+    (function () {
+        const formulaire = document.getElementById('formulaire-filtres');
+        const champRecherche = document.getElementById('recherche');
+        let minuterie = null;
+
+        // Liste déroulante et case à cocher
+        formulaire.querySelectorAll('select, input[type="checkbox"]').forEach(function (champ) {
+            champ.addEventListener('change', function () { formulaire.submit(); });
+        });
+
+        // Champ texte
+        champRecherche.addEventListener('input', function () {
+            clearTimeout(minuterie);
+            minuterie = setTimeout(function () {
+                sessionStorage.setItem('focusRecherche', '1');
+                formulaire.submit();
+            }, 400);
+        });
+
+        // Après le rechargement de la page,curseur remis
+        if (sessionStorage.getItem('focusRecherche') === '1') {
+            sessionStorage.removeItem('focusRecherche');
+            champRecherche.focus();
+            champRecherche.setSelectionRange(champRecherche.value.length, champRecherche.value.length);
+        }
+    })();
+</script>
+@endpush

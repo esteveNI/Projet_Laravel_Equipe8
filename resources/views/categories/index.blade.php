@@ -1,13 +1,3 @@
-{{--
-
-    Vue : liste des catégories (bloc 4 de Vital).
-
-    Tableau avec le nom de chaque catégorie et le nombre de produits
-    qu'elle contient, plus les actions ajouter, modifier et supprimer.
-    La suppression d'une catégorie remplie est refusée côté serveur
-    (CategorieController : méthode destroy) avec un message d'erreur clair.
-
---}}
 
 @extends('layout')
 
@@ -43,6 +33,14 @@
                     </thead>
                     <tbody>
                         @foreach ($categories as $categorie)
+                            @php
+                                // Une catégorie qui contient des produits ne peut pas être supprimée.
+                                $bloquee = $categorie->produits_count > 0;
+                                $titre = $bloquee ? 'Suppression impossible' : 'Supprimer cette catégorie ?';
+                                $message = $bloquee
+                                    ? "La catégorie « {$categorie->nom} » contient encore {$categorie->produits_count} produit(s). Déplacez ou supprimez d'abord ces produits."
+                                    : "La catégorie « {$categorie->nom} » sera définitivement supprimée. Cette action est irréversible.";
+                            @endphp
                             <tr>
                                 <td>{{ $categorie->nom }}</td>
                                 <td>
@@ -54,15 +52,14 @@
                                     <div class="actions-ligne">
                                         <a href="{{ route('categories.edit', $categorie) }}"
                                            class="bouton bouton-editer bouton-tout-petit">Modifier</a>
-                                        {{-- Suppression avec confirmation : étape obligatoire avant l'envoi --}}
-                                        <form action="{{ route('categories.destroy', $categorie) }}" method="POST"
-                                              onsubmit="return confirm('Voulez-vous vraiment supprimer la catégorie « {{ $categorie->nom }} » ?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="bouton bouton-danger bouton-tout-petit">
-                                                Supprimer
-                                            </button>
-                                        </form>
+                                        <button type="button" class="bouton bouton-danger bouton-tout-petit"
+                                                data-suppression
+                                                data-action="{{ route('categories.destroy', $categorie) }}"
+                                                data-titre="{{ $titre }}"
+                                                data-message="{{ $message }}"
+                                                data-bloque="{{ $bloquee ? '1' : '0' }}">
+                                            Supprimer
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

@@ -1,61 +1,45 @@
+
 <!DOCTYPE html>
-{{--
-    Gabarit commun de l'application (bloc 2 de Vital).
-    Toutes les pages l'utilisent avec la directive d'héritage Blade (extends layout).
-    Rôle du gabarit :
-    - en-tête avec le titre du site ;
-    - menu avec trois entrées : Tableau de bord, Produits, Catégories ;
-    - zone qui affiche les messages de succès et d'erreur (effacement
-      automatique au bout de 2 secondes) ;
-    - emplacement du contenu de chaque page (section « contenu ») ;
-    - pied de page avec les crédits du projet ;
-    - mise en page qui s'adapte au téléphone : le menu se replie derrière
-      le bouton hamburger et les tableaux défilent horizontalement.
-    Remarque : le lien « Produits » est affiché seulement si la route
-    existe (partie d'Esteve, bloc 3). Jusqu'à sa fusion, l'entrée est
-    simplement masquée au lieu de provoquer une erreur.
---}}
 <html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('titre', 'Ma boutique')</title>
-    {{-- Feuille de style maison (bloc 2) : aucune compilation npm nécessaire --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
 
-    {{-- En-tête : titre du site et bouton hamburger (visible sur téléphone) --}}
-    <header class="l-en-tete">
-        <div class="rangee-en-tete">
-            <a href="{{ route('tableau-de-bord') }}" class="titre-du-site">
-                Ma boutique
-            </a>
-            <button type="button" class="bouton-menu" aria-label="Ouvrir ou fermer le menu"
+    @php
+        $surLeTableauDeBord = request()->routeIs('tableau-de-bord');
+        $surLesProduits = Route::has('produits.index') && request()->routeIs('produits.*');
+        $surLesCategories = request()->routeIs('categories.*');
+    @endphp
+
+    {{-- En-tête : le conteneur est le même que celui du contenu, donc tout est aligné --}}
+    <header class="entete">
+        <div class="conteneur">
+            <a href="{{ route('tableau-de-bord') }}" class="entete-titre">Ma boutique</a>
+
+            {{-- Bouton hamburger : visible seulement sur téléphone --}}
+            <button type="button" class="entete-burger" aria-label="Ouvrir ou fermer le menu"
                     aria-expanded="false" onclick="basculerMenu(this)">
                 <span></span><span></span><span></span>
             </button>
-        </div>
 
-        {{-- Menu principal : trois entrées demandées par le sujet --}}
-        @php
-            $surLeTableauDeBord = request()->routeIs('tableau-de-bord');
-            $surLesProduits = Route::has('produits.index') && request()->routeIs('produits.*');
-            $surLesCategories = request()->routeIs('categories.*');
-        @endphp
-        <nav class="menu" id="menu-principal">
-            <a href="{{ route('tableau-de-bord') }}" class="{{ $surLeTableauDeBord ? 'actif' : '' }}">
-                Tableau de bord
-            </a>
-            @if (Route::has('produits.index'))
-                <a href="{{ route('produits.index') }}" class="{{ $surLesProduits ? 'actif' : '' }}">
-                    Produits
+            <nav class="entete-menu" id="menu-principal">
+                <a href="{{ route('tableau-de-bord') }}" class="{{ $surLeTableauDeBord ? 'actif' : '' }}">
+                    Tableau de bord
                 </a>
-            @endif
-            <a href="{{ route('categories.index') }}" class="{{ $surLesCategories ? 'actif' : '' }}">
-                Catégories
-            </a>
-        </nav>
+                @if (Route::has('produits.index'))
+                    <a href="{{ route('produits.index') }}" class="{{ $surLesProduits ? 'actif' : '' }}">
+                        Produits
+                    </a>
+                @endif
+                <a href="{{ route('categories.index') }}" class="{{ $surLesCategories ? 'actif' : '' }}">
+                    Catégories
+                </a>
+            </nav>
+        </div>
     </header>
 
     {{-- Contenu principal : messages flash puis contenu propre à la page --}}
@@ -76,27 +60,71 @@
             </div>
         @endif
 
-        {{-- Emplacement du contenu de chaque page --}}
         @yield('contenu')
     </main>
 
+    {{--
+        Boîte de confirmation partagée. Un bouton qui possède l'attribut
+        data-suppression l'ouvre en lui passant le titre, le message et l'adresse
+        de suppression. Si data-bloque vaut 1, la suppression est impossible :
+        on affiche seulement le message et un bouton « Fermer ».
+    --}}
+    <dialog id="dialogue-confirmation" class="dialogue">
+        <form method="POST" id="dialogue-formulaire">
+            @csrf
+            @method('DELETE')
+            <h2 id="dialogue-titre"></h2>
+            <p id="dialogue-message"></p>
+            <div class="dialogue-actions">
+                <button type="button" class="bouton bouton-editer" id="dialogue-annuler">Annuler</button>
+                <button type="submit" class="bouton bouton-danger" id="dialogue-confirmer">Supprimer</button>
+            </div>
+        </form>
+    </dialog>
+
     <script>
-        // Replie ou déplie le menu sur téléphone (bloc 2 : menu qui se replie).
+        // Replie ou déplie le menu sur téléphone.
         function basculerMenu(bouton) {
             const menu = document.getElementById('menu-principal');
-            const ouvert = menu.style.display === 'flex';
-            menu.style.display = ouvert ? 'none' : 'flex';
-            bouton.setAttribute('aria-expanded', ouvert ? 'false' : 'true');
+            const ouvert = menu.classList.toggle('ouvert');
+            bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
         }
 
-        // Efface automatiquement les messages de succès et d'erreur
-        // après 2 secondes, avec un fondu de 0,3 s (bloc 7 : finitions).
-        document.querySelectorAll('.alerte').forEach(function (element) {
+        // Efface automatiquement les messages de succès 
+        document.querySelectorAll('.alerte-succes, .alerte-erreur').forEach(function (element) {
+            const duree = element.classList.contains('alerte-erreur') ? 5000 : 2000;
             setTimeout(function () {
                 element.classList.add('alerte-estompe');
                 setTimeout(function () { element.remove(); }, 300);
-            }, 2000);
+            }, duree);
         });
+
+        // Boîte de confirmation de suppression.
+        (function () {
+            const dialogue = document.getElementById('dialogue-confirmation');
+            const formulaire = document.getElementById('dialogue-formulaire');
+            const titre = document.getElementById('dialogue-titre');
+            const message = document.getElementById('dialogue-message');
+            const confirmer = document.getElementById('dialogue-confirmer');
+            const annuler = document.getElementById('dialogue-annuler');
+
+            document.querySelectorAll('[data-suppression]').forEach(function (bouton) {
+                bouton.addEventListener('click', function () {
+                    const bloque = bouton.dataset.bloque === '1';
+                    titre.textContent = bouton.dataset.titre;
+                    message.textContent = bouton.dataset.message;
+                    formulaire.action = bouton.dataset.action;
+                    confirmer.style.display = bloque ? 'none' : '';
+                    annuler.textContent = bloque ? 'Fermer' : 'Annuler';
+                    dialogue.showModal();
+                });
+            });
+
+            annuler.addEventListener('click', function () { dialogue.close(); });
+        })();
     </script>
+
+    {{-- Scripts propres à une page (voir @push('scripts') dans les vues) --}}
+    @stack('scripts')
 </body>
 </html>
