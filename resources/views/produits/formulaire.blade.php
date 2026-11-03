@@ -1,16 +1,3 @@
-{{--
-
-    Vue : formulaire d'un produit, partagé entre l'ajout et la
-    modification (bloc 3 d'Esteve).
-
-    - Ajout : le produit est une nouvelle instance vide (méthode create).
-    - Modification : le produit existe déjà (méthode edit), le formulaire
-      est pré-rempli avec ses valeurs et envoyé en méthode PUT.
-
-    La liste déroulante montre les catégories existantes, et les messages
-    d'erreur de validation s'affichent sous chaque champ concerné.
-
---}}
 
 @extends('layout')
 

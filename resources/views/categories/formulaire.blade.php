@@ -1,17 +1,3 @@
-{{--
-
-    Vue : formulaire des catégories, partagé entre l'ajout et la
-    modification (bloc 4 de Vital).
-
-    - Ajout : cette page vient de la méthode create du contrôleur des
-      catégories (nouvelle instance vide).
-    - Modification : la page vient de la méthode edit (instance existante)
-      et le formulaire est envoyé en méthode PUT.
-
-    Le nom est obligatoire et unique ; le message d'erreur de validation
-    s'affiche sous le champ concerné.
-
---}}
 
 @extends('layout')
 
